@@ -1,0 +1,33 @@
+﻿.footer{
+	line-height: 60px;
+	background-color: #C8C6D7
+}
+.navbar-background{
+background-color:#2B4162;
+}
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+/* HTML */
+body{
+	background-color: #F3F7F0;
+}
+h1{
+	color: #2B4162;
+}
+
+#navbar-link{
+	font-weight:bold;
+	color:#C8C6D7;
+		font-size: 30px;
+	text-decoration:none
+
+}
+#navbar-link:hover{
+	font-weight:bold;
+	color:#9998A1;
+		font-size: 30px;
+	text-decoration:none
+
+}

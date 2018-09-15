@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <title>Map</title>
+  <!-- Required meta tags -->
+  <!-- Unidcode/Translation-->
+  <meta charset="utf-8">
+  <!--Mobile First -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    var geocoder = new google.maps.Geocoder();
+
+    function geocodePosition(pos) {
+      geocoder.geocode({
+        latLng: pos
+      }, function(responses) {
+        if (responses && responses.length > 0) {
+          updateMarkerAddress(responses[0].formatted_address);
+        } else {
+          updateMarkerAddress('Cannot determine address at this location.');
+        }
+      });
+    }
+
+    function updateMarkerStatus(str) {
+      document.getElementById('markerStatus').innerHTML = str;
+    }
+
+    function updateMarkerPosition(latLng) {
+      document.getElementById('info').innerHTML = [
+        latLng.lat(),
+        latLng.lng()
+      ].join(', ');
+    }
+
+    function getPoint_Lat(latLng) {
+      document.getElementById('pointLat').innerHTML = [
+        latLng.lat()
+      ];
+
+    }
+
+    function getPoint_Lng(latLng) {
+      document.getElementById('pointLng').innerHTML = [
+        latLng.lng()
+      ];
+      longitude = [latLng.lng()];
+    }
+
+    function updateMarkerAddress(str) {
+      document.getElementById('address').innerHTML = str;
+    }
+
+    function initialize() {
+      var latLng = new google.maps.LatLng(-34.397, 150.644);
+      var map = new google.maps.Map(document.getElementById('mapCanvas'), {
+        zoom: 8,
+        center: latLng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      var marker = new google.maps.Marker({
+        position: latLng,
+        title: 'Point A',
+        map: map,
+        draggable: true
+      });
+
+      // Update current position info.
+      updateMarkerPosition(latLng);
+      geocodePosition(latLng);
+
+      // Add dragging event listeners.
+      google.maps.event.addListener(marker, 'dragstart', function() {
+        updateMarkerAddress('Dragging...');
+      });
+
+      google.maps.event.addListener(marker, 'drag', function() {
+        updateMarkerStatus('Dragging...');
+        updateMarkerPosition(marker.getPosition());
+        getPoint_Lat(marker.getPosition());
+        getPoint_Lng(marker.getPosition());
+      });
+
+      google.maps.event.addListener(marker, 'dragend', function() {
+        updateMarkerStatus('Drag ended');
+        geocodePosition(marker.getPosition());
+      });
+    }
+    // Onload handler to fire off the app.
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+    function postContactToGoogle() {
+      var latitude = document.getElementById('pointLat');
+      var longitude = document.getElementById('pointLng');;
+      var description = $('#description').val();
+
+
+      $.ajax({
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSccwx1JnSaptL1JlXy-Jmr2S9NjkisKRsmj0pt_4E6bATYVdA/formResponse",
+        data: {
+          "entry.119945654": latitude,
+          "entry.760486044": longitude,
+          "entry.573971734": description
+        },
+        type: "POST",
+        dataType: "xml",
+        statusCode: {
+          0: function() {
+            window.location.replace("CoordsfromPoint.html");
+          },
+          200: function() {
+            window.location.replace("CoordsfromPoint.html");
+          }
+        }
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <style>
+    #mapCanvas {
+         width: 500px;
+         height: 400px;
+         float: center;
+         }
+         #infoPanel {
+         float: center;
+         margin-left: 10px;
+         }
+         #infoPanel div {
+         margin-bottom: 5px;
+         }
+</style>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-background">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" id="navbar-link"href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="navbar-link"href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"id="navbar-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <!-- Heading -->
+  <div class="container">
+    <div class="row">
+      <div class="col-12" align="center">
+        <h1>Map of Nelson Area</h1>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6" align="center">
+        <div id="mapCanvas"></div>
+      </div>
+      <div class="col-6" align="center">
+        <div id="infoPanel">
+          <b>Marker status:</b>
+          <div id="markerStatus"><i>Click and drag the marker.</i></div>
+          <b>Current position:</b>
+          <div id="info"></div>
+          <b>Latitude</b>
+          <div id="pointLat"></div>
+          <b>Longitude</b>
+          <div id="pointLng"></div>
+          <b>Closest matching address:</b>
+          <div id="address"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clear"></div>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+
+      <div class="col-12">
+
+        <form method=["POST", "GET"]>
+          <!-- <div class="form-group">
+            <label for="concern">What are your concerns in this area?</label>
+            <input type="text" class="form-control" id="concern"placeholder="Enter...">
+    </div>
+            <div class="form-group">
+              <label for="effects">Describe the effects you have seen in this area</label>
+              <input type="text" class="form-control" id="effects" placeholder="Enter...">
+  </div>
+              <div class="form-group">
+                <label for="photo">Do you have any photos of this area</label>
+                <input type="file" class="form-control-file" id="photo">
+  </div>
+                <div class="form-group">
+                  <label for="solution">What solutions would you propose to protect this area?</label>
+                  <input type="text" class="form-control" id="solution" placeholder="Enter...">
+  </div> -->
+
+                  <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <!-- Footer -->
+  <div class="container-fluid">
+    <div class="row footer">
+      <div class="d-none d-md-block col-lg-12">
+        <div align="center">
+          <br>Created for Hack Nelson 2018
+          <br>
+			</div>
+        </div>
+      </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>Untitled 1</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
