@@ -11,10 +11,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="style.css">
+{#  <link rel="stylesheet" type="text/css" href="style.css">#}
   <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-  <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script type="text/javascript">
     var geocoder = new google.maps.Geocoder();
@@ -124,6 +124,7 @@
       });
     }
   </script>
+    <script type="text/javascript" src="static/scripts/app.js"> </script>
 </head>
 
 <body>
@@ -200,7 +201,7 @@
 
       <div class="col-12">
 
-        <form method=["POST", "GET"]>
+        <form>
           <!-- <div class="form-group">
             <label for="concern">What are your concerns in this area?</label>
             <input type="text" class="form-control" id="concern"placeholder="Enter...">
@@ -218,7 +219,7 @@
                   <input type="text" class="form-control" id="solution" placeholder="Enter...">
   </div> -->
 
-                  <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" (onclick)="addCoordinate(document.getElementById('pointLat'), document.getElementById('pointLng')">Submit</button>
         </form>
       </div>
     </div>
