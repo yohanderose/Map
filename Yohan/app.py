@@ -77,6 +77,7 @@ if __name__== "__main__":
 
         for coordinate in coordinates:
             test = coordinate["Latitude"]
+            label = coordinate["Label"]
             insert = ([float(coordinate["Latitude"]), float(coordinate["Longitude"])])
             c.execute("""INSERT INTO Locations VALUES(?,?)""", insert)
 

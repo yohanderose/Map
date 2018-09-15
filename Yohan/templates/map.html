@@ -18,7 +18,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript">
     var geocoder = new google.maps.Geocoder();
-
+    var map;
     function geocodePosition(pos) {
       geocoder.geocode({
         latLng: pos
@@ -62,7 +62,7 @@
 
     function initialize() {
       var latLng = new google.maps.LatLng(-34.397, 150.644);
-      var map = new google.maps.Map(document.getElementById('mapCanvas'), {
+      map = new google.maps.Map(document.getElementById('mapCanvas'), {
         zoom: 8,
         center: latLng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -219,7 +219,8 @@
                   <input type="text" class="form-control" id="solution" placeholder="Enter...">
   </div> -->
 
-            <button type="button" class="btn btn-primary" onclick="addCoordinate(document.getElementById('pointLat').innerText, document.getElementById('pointLng').innerText)">Submit</button>
+            <button type="button" class="btn btn-primary" onclick="addCoordinate(document.getElementById('pointLat').innerText, document.getElementById('pointLng').innerText), document">Submit</button>
+            <button type="button" onclick="getCoordinates()"/>
 
       </div>
     </div>
