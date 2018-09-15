@@ -3,6 +3,6 @@ function helloWorld() {
 }
 
 function addCoordinate(latitude, longitude) {
-    console.error(latutude);
+    console.error(latitude);
     console.error(longitude);
 }
